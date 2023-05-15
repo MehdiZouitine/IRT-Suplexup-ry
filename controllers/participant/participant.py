@@ -46,7 +46,7 @@ class Fatima (Robot):
 
     def run(self):
         
-        n = 120
+        n = 180
         while self.step(self.time_step) != -1:
             self.fall_detector.check()
             if self.t < 20:
