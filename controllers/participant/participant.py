@@ -53,7 +53,7 @@ class Fatima (Robot):
                 radius=0.05
             elif self.t in range(n, n+55):
                 radius = -0.05
-            elif self.t in range(n+125, n+175):
+            elif self.t in range(n+125, n+176):
                 radius = -0.05
             elif self.t >n+210:
                 print("=ok=")
