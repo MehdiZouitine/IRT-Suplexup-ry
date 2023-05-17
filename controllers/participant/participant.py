@@ -48,10 +48,11 @@ class Fatima (Robot):
         
         n = 180
         while self.step(self.time_step) != -1:
+            self.fall_detector.check()
             if self.t > n+210:
                 pass
             else:
-                self.fall_detector.check()
+                
                 if self.t < 15:
                     radius=0.05
                 elif self.t in range(n, n+55):
