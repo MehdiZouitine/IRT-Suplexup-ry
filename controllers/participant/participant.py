@@ -48,21 +48,21 @@ class Fatima (Robot):
         
         n = 180
         while self.step(self.time_step) != -1:
-            self.fall_detector.check()
-            if self.t < 15:
-                radius=0.05
-            elif self.t in range(n, n+55):
-                radius = -0.05
-            elif self.t in range(n+125, n+176):
-                radius = -0.05
-            elif self.t >n+210:
-                print("=ok=")
-                radius = -0.05
+            if self.t > n+210:
+                pass
             else:
-                radius = 0
-            
-            self.gait_manager.update_theta()
-            self.gait_manager.command_to_motors(desired_radius=radius)
+                self.fall_detector.check()
+                if self.t < 15:
+                    radius=0.05
+                elif self.t in range(n, n+55):
+                    radius = -0.05
+                elif self.t in range(n+125, n+176):
+                    radius = -0.05
+                else:
+                    radius = 0
+
+                self.gait_manager.update_theta()
+                self.gait_manager.command_to_motors(desired_radius=radius)
             self.t += 1
             # self.gait_manager.command_to_motors(desired_radius=radius)
             # if self.start:
