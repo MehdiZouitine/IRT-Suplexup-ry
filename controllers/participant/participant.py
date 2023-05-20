@@ -26,74 +26,167 @@ from utils.gait_manager import GaitManager
 # from utils.camera import Camera
 
 
-class Fatima (Robot):
-    SMALLEST_TURNING_RADIUS = 0.1
-    SAFE_ZONE = 0.75
-    TIME_BEFORE_DIRECTION_CHANGE = 200  # 8000 ms / 40 ms
+# class Fatima (Robot):
+#     SMALLEST_TURNING_RADIUS = 0.1
+#     SAFE_ZONE = 0.75
+#     TIME_BEFORE_DIRECTION_CHANGE = 200  # 8000 ms / 40 ms
 
-    def __init__(self):
-        Robot.__init__(self)
-        self.time_step = int(self.getBasicTimeStep())
+#     def __init__(self):
+#         Robot.__init__(self)
+#         self.time_step = int(self.getBasicTimeStep())
 
-        # self.camera = Camera(self)
-        self.fall_detector = FallDetection(self.time_step, self)
-        self.gait_manager = GaitManager(self, self.time_step)
-        self.heading_angle = 3.14 / 2
-        # Time before changing direction to stop the robot from falling off the ring
-        self.counter = 0
-        self.t = 0
-        self.start = True
+#         # self.camera = Camera(self)
+#         self.fall_detector = FallDetection(self.time_step, self)
+#         self.gait_manager = GaitManager(self, self.time_step)
+#         self.heading_angle = 3.14 / 2
+#         # Time before changing direction to stop the robot from falling off the ring
+#         self.counter = 0
+#         self.t = 0
+#         self.start = True
 
-    def run(self):
+#     def run(self):
         
-        n = 180
-        while self.step(self.time_step) != -1:
-            self.fall_detector.check()
-            if self.t < 15:
-                radius=0.05
-            elif self.t in range(n, n+55):
-                radius = -0.05
-            elif self.t in range(n+125, n+176):
-                radius = -0.05
-            elif self.t >n+210:
-                print("=ok=")
-                radius = -0.05
-            else:
-                radius = 0
+#         n = 180
+#         while self.step(self.time_step) != -1:
+#             self.fall_detector.check()
+#             if self.t < 15:
+#                 radius=0.05
+#             elif self.t in range(n, n+55):
+#                 radius = -0.05
+#             elif self.t in range(n+125, n+176):
+#                 radius = -0.05
+#             elif self.t >n+210:
+#                 print("=ok=")
+#                 radius = -0.05
+#             else:
+#                 radius = 0
             
-            self.gait_manager.update_theta()
-            self.gait_manager.command_to_motors(desired_radius=radius)
-            self.t += 1
-            # self.gait_manager.command_to_motors(desired_radius=radius)
-            # if self.start:
-                # radius=-0.1
-            # else:
-                # if self.t < 30:
-                    # radius=0.1
-                # elif (self.t > 30):
-                    # radius=0
+#             self.gait_manager.update_theta()
+#             self.gait_manager.command_to_motors(desired_radius=radius)
+#             self.t += 1
+#             # self.gait_manager.command_to_motors(desired_radius=radius)
+#             # if self.start:
+#                 # radius=-0.1
+#             # else:
+#                 # if self.t < 30:
+#                     # radius=0.1
+#                 # elif (self.t > 30):
+#                     # radius=0
             
-            # We need to update the internal theta value of the gait manager at every step:
-            # self.gait_manager.update_theta()
-            # self.gait_manager.command_to_motors(desired_radius=radius)
-            # self.t += 1
-            # if self.t == 100:
-                # self.t = 0
-            # if self.t == 30:
-                # self.start = False
+#             # We need to update the internal theta value of the gait manager at every step:
+#             # self.gait_manager.update_theta()
+#             # self.gait_manager.command_to_motors(desired_radius=radius)
+#             # self.t += 1
+#             # if self.t == 100:
+#                 # self.t = 0
+#             # if self.t == 30:
+#                 # self.start = False
                 
 
     
 
-    def _get_normalized_opponent_x(self):
-        """Locate the opponent in the image and return its horizontal position in the range [-1, 1]."""
-        img = self.camera.get_image()
-        _, _, horizontal_coordinate = IP.locate_opponent(img)
-        if horizontal_coordinate is None:
-            return 0
-        return horizontal_coordinate * 2 / img.shape[1] - 1
+#     def _get_normalized_opponent_x(self):
+#         """Locate the opponent in the image and return its horizontal position in the range [-1, 1]."""
+#         img = self.camera.get_image()
+#         _, _, horizontal_coordinate = IP.locate_opponent(img)
+#         if horizontal_coordinate is None:
+#             return 0
+#         return horizontal_coordinate * 2 / img.shape[1] - 1
+
+
+# # create the Robot instance and run main loop
+# wrestler = Fatima()
+# wrestler.run()
+
+
+from utils.motion_library import MotionLibrary
+
+
+class Bob (Robot):
+    def __init__(self):
+        super().__init__()
+        # to load all the motions from the motion folder, we use the Motion_library class:
+        self.library = MotionLibrary()
+
+        # we initialize the shoulder pitch motors using the Robot.getDevice() function:
+        self.RShoulderPitch = self.getDevice("RShoulderPitch")
+        self.LShoulderPitch = self.getDevice("LShoulderPitch")
+        self.t = 0
+        self.nb_motions = 0
+        self.time_step = int(self.getBasicTimeStep())
+        self.fall_detector = FallDetection(self.time_step, self)
+
+    def run(self):
+        # to control a motor, we use the setPosition() function:
+        self.RShoulderPitch.setPosition(1.3)
+        self.LShoulderPitch.setPosition(1.3)
+        # for more motor control functions, see the documentation: https://cyberbotics.com/doc/reference/motor
+        # to see the list of available devices, see the NAO documentation: https://cyberbotics.com/doc/guide/nao
+
+        time_step = int(self.getBasicTimeStep())
+        while self.step(time_step) != -1:
+            self.fall_detector.check()
+            if self.t ==0: # We wait a bit for the robot to stabilise
+                # to play a motion from the library, we use the play() function as follows:
+                self.library.play('SideStepLeftLoop')
+                # self.nb_motions += 1
+            
+            if self.t > 1000:
+                self.library.stop('SideStepLeftLoop')
+                self.library.play('ForwardLoop')
+            if self.t > 1500:
+                self.library.stop('ForwardLoop')
+                self.library.play("TurnRight20")
+            if self.t > 1600:
+                self.library.stop("TurnRight20")
+                self.library.play("ForwardLoop")
+            if self.t > 1800:
+                self.library.stop("ForwardLoop")
+                self.library.play("TurnRight60")
+            if self.t > 2000:
+                self.library.stop("TurnRight60")
+                self.library.play("ForwardLoop")
+            if self.t > 2500:
+                self.library.stop("ForwardLoop")
+                self.library.play("TurnRight60")
+            if self.t > 2850:
+                self.library.stop("TurnRight60")
+                self.library.play("ForwardLoop")
+            if self.t > 3300:
+                self.library.stop("ForwardLoop")
+                self.library.play("TurnRight60")
+            if self.t > 3900:
+                self.library.stop("TurnRight60")
+                self.library.play("ForwardLoop")
+            if self.t > 4300:
+                self.library.stop("ForwardLoop")
+
+
+            # if self.t > 1000:
+            #     if self.nb_motions == 1:
+            #         self.library.stop('SideStepLeftLoop')
+            #     if self.library.isMotionOver() and self.nb_motions == 1:
+            #         self.library.play('SideStepLeft')
+            #         self.nb_motions += 1
+            #     if self.library.isMotionOver() and self.nb_motions == 2:
+            #         self.library.play('TurnLeft20')
+            #         self.nb_motions += 1
+            #     if self.library.isMotionOver() and self.nb_motions == 3:
+            #         self.library.play('Forwards50')
+            #         self.nb_motions += 1
+            #     if self.library.isMotionOver() and self.nb_motions == 4:
+            #         self.library.play('Forwards50')
+            #         self.nb_motions += 1
+                
+            #     if self.library.isMotionOver() and self.nb_motions == 5:
+            #         self.library.play('TurnRight60')
+            #         self.nb_motions += 1
+            self.t += 1
+            print(self.t)
+            
+                
 
 
 # create the Robot instance and run main loop
-wrestler = Fatima()
+wrestler = Bob()
 wrestler.run()

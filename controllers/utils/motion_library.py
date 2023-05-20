@@ -44,4 +44,12 @@ class MotionLibrary:
 
     def play(self, name):
         """Plays the motion with the given name."""
+        self.current_motion = name
         self.motions[name].play()
+    
+    def stop(self, name):
+        """Stops the motion with the given name."""
+        self.motions[name].stop()
+
+    def isMotionOver(self):
+        return self.motions[self.current_motion].isOver()
