@@ -182,8 +182,6 @@ class Bob (Robot):
             #         self.library.play('TurnRight60')
             #         self.nb_motions += 1
             self.t += 1
-            print(self.t)
-            
                 
 
 
