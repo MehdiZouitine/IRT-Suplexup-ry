@@ -125,41 +125,67 @@ class Bob (Robot):
 
         time_step = int(self.getBasicTimeStep())
         while self.step(time_step) != -1:
-            self.fall_detector.check()
-            if self.t ==0: # We wait a bit for the robot to stabilise
+            is_fallen = self.fall_detector.detect_fall()
+            if is_fallen:
+                if current_motion != 'Stand':
+                    self.library.stop(current_motion)
+                self.fall_detector.check()
+            if self.t < 1000 and not is_fallen: # We wait a bit for the robot to stabilise
                 # to play a motion from the library, we use the play() function as follows:
                 self.library.play('SideStepLeftLoop')
+                current_motion = 'SideStepLeftLoop'
+                self.t += 1
                 # self.nb_motions += 1
-            
-            if self.t > 1000:
+            if self.t >= 1000 and self.t<1500  and not is_fallen:
                 self.library.stop('SideStepLeftLoop')
                 self.library.play('ForwardLoop')
-            if self.t > 1500:
+                current_motion = 'ForwardLoop'
+                self.t += 1
+            if self.t >= 1500 and self.t<1600  and not is_fallen:
                 self.library.stop('ForwardLoop')
                 self.library.play("TurnRight20")
-            if self.t > 1600:
+                current_motion = 'TurnRight20'
+                self.t += 1
+            if self.t >= 1600 and self.t<1800  and not is_fallen:
                 self.library.stop("TurnRight20")
                 self.library.play("ForwardLoop")
-            if self.t > 1800:
+                current_motion = 'ForwardLoop'
+                self.t += 1
+            if self.t >= 1800 and self.t<2000  and not is_fallen:
                 self.library.stop("ForwardLoop")
                 self.library.play("TurnRight60")
-            if self.t > 2000:
+                current_motion = 'TurnRight60'
+                self.t += 1
+            if self.t >= 2000 and self.t<2500 and not is_fallen:
                 self.library.stop("TurnRight60")
                 self.library.play("ForwardLoop")
-            if self.t > 2500:
+                current_motion = 'ForwardLoop'
+                self.t += 1
+            if self.t >= 2500 and self.t<2850  and not is_fallen:
                 self.library.stop("ForwardLoop")
                 self.library.play("TurnRight60")
-            if self.t > 2850:
+                current_motion = 'TurnRight60'
+                self.t += 1
+            if self.t >= 2850 and self.t<3300  and not is_fallen:
                 self.library.stop("TurnRight60")
                 self.library.play("ForwardLoop")
-            if self.t > 3300:
+                current_motion  = 'ForwardLoop'
+                self.t += 1
+            if self.t >= 3300 and self.t<3900  and not is_fallen:
                 self.library.stop("ForwardLoop")
                 self.library.play("TurnRight60")
-            if self.t > 3900:
+                current_motion = 'TurnRight60'
+                self.t += 1
+            if self.t >= 3900 and self.t<4300  and not is_fallen:
                 self.library.stop("TurnRight60")
                 self.library.play("ForwardLoop")
-            if self.t > 4300:
+                current_motion = 'ForwardLoop'
+                self.t += 1
+            if self.t >= 4300  and not is_fallen:
                 self.library.stop("ForwardLoop")
+                self.t += 1
+                self.library.play("Stand")
+                current_motion = 'Stand'
 
 
             # if self.t > 1000:
@@ -181,7 +207,7 @@ class Bob (Robot):
             #     if self.library.isMotionOver() and self.nb_motions == 5:
             #         self.library.play('TurnRight60')
             #         self.nb_motions += 1
-            self.t += 1
+            
                 
 
 
