@@ -116,6 +116,77 @@ class Bob (Robot):
         self.time_step = int(self.getBasicTimeStep())
         self.fall_detector = FallDetection(self.time_step, self)
 
+    # def run(self):
+    #     # to control a motor, we use the setPosition() function:
+    #     self.RShoulderPitch.setPosition(1.3)
+    #     self.LShoulderPitch.setPosition(1.3)
+    #     # for more motor control functions, see the documentation: https://cyberbotics.com/doc/reference/motor
+    #     # to see the list of available devices, see the NAO documentation: https://cyberbotics.com/doc/guide/nao
+
+    #     time_step = int(self.getBasicTimeStep())
+    #     while self.step(time_step) != -1:
+    #         is_fallen = self.fall_detector.detect_fall()
+    #         if is_fallen:
+    #             if current_motion != 'Stand':
+    #                 self.library.stop(current_motion)
+    #             self.fall_detector.check()
+    #         if self.t < 1000 and not is_fallen: # We wait a bit for the robot to stabilise
+    #             # to play a motion from the library, we use the play() function as follows:
+    #             self.library.play('SideStepLeftLoop')
+    #             current_motion = 'SideStepLeftLoop'
+    #             self.t += 1
+    #             # self.nb_motions += 1
+    #         if self.t >= 1000 and self.t<1500  and not is_fallen:
+    #             self.library.stop('SideStepLeftLoop')
+    #             self.library.play('ForwardLoop')
+    #             current_motion = 'ForwardLoop'
+    #             self.t += 1
+    #         if self.t >= 1500 and self.t<1600  and not is_fallen:
+    #             self.library.stop('ForwardLoop')
+    #             self.library.play("TurnRight20")
+    #             current_motion = 'TurnRight20'
+    #             self.t += 1
+    #         if self.t >= 1600 and self.t<1800  and not is_fallen:
+    #             self.library.stop("TurnRight20")
+    #             self.library.play("ForwardLoop")
+    #             current_motion = 'ForwardLoop'
+    #             self.t += 1
+    #         if self.t >= 1800 and self.t<2000  and not is_fallen:
+    #             self.library.stop("ForwardLoop")
+    #             self.library.play("TurnRight60")
+    #             current_motion = 'TurnRight60'
+    #             self.t += 1
+    #         if self.t >= 2000 and self.t<2500 and not is_fallen:
+    #             self.library.stop("TurnRight60")
+    #             self.library.play("ForwardLoop")
+    #             current_motion = 'ForwardLoop'
+    #             self.t += 1
+    #         if self.t >= 2500 and self.t<2850  and not is_fallen:
+    #             self.library.stop("ForwardLoop")
+    #             self.library.play("TurnRight60")
+    #             current_motion = 'TurnRight60'
+    #             self.t += 1
+    #         if self.t >= 2850 and self.t<3300  and not is_fallen:
+    #             self.library.stop("TurnRight60")
+    #             self.library.play("ForwardLoop")
+    #             current_motion  = 'ForwardLoop'
+    #             self.t += 1
+    #         if self.t >= 3300 and self.t<3900  and not is_fallen:
+    #             self.library.stop("ForwardLoop")
+    #             self.library.play("TurnRight60")
+    #             current_motion = 'TurnRight60'
+    #             self.t += 1
+    #         if self.t >= 3900 and self.t<4300  and not is_fallen:
+    #             self.library.stop("TurnRight60")
+    #             self.library.play("ForwardLoop")
+    #             current_motion = 'ForwardLoop'
+    #             self.t += 1
+    #         if self.t >= 4300  and not is_fallen:
+    #             self.library.stop("ForwardLoop")
+    #             self.t += 1
+    #             self.library.play("Stand")
+    #             current_motion = 'Stand'
+
     def run(self):
         # to control a motor, we use the setPosition() function:
         self.RShoulderPitch.setPosition(1.3)
@@ -130,83 +201,101 @@ class Bob (Robot):
                 if current_motion != 'Stand':
                     self.library.stop(current_motion)
                 self.fall_detector.check()
-            if self.t < 1000 and not is_fallen: # We wait a bit for the robot to stabilise
+            if self.t < 1500 and not is_fallen: # We wait a bit for the robot to stabilise
                 # to play a motion from the library, we use the play() function as follows:
                 self.library.play('SideStepLeftLoop')
                 current_motion = 'SideStepLeftLoop'
                 self.t += 1
                 # self.nb_motions += 1
-            if self.t >= 1000 and self.t<1500  and not is_fallen:
+
+            if self.t >= 1500 and self.t<1550  and not is_fallen:
                 self.library.stop('SideStepLeftLoop')
-                self.library.play('ForwardLoop')
-                current_motion = 'ForwardLoop'
+                self.library.play("Stand")
+                current_motion = 'Stand'
                 self.t += 1
-            if self.t >= 1500 and self.t<1600  and not is_fallen:
-                self.library.stop('ForwardLoop')
+            if self.t >= 1550 and self.t<2300  and not is_fallen:
+                self.library.stop("Stand")
+                self.library.play("ForwardLoop")
+                current_motion = 'ForwardLoop'
+                
+                self.t += 1
+            if self.t >= 2300 and self.t<2500  and not is_fallen:
+                self.library.stop("ForwardLoop")
                 self.library.play("TurnRight20")
                 current_motion = 'TurnRight20'
                 self.t += 1
-            if self.t >= 1600 and self.t<1800  and not is_fallen:
+            if self.t >= 2500 and self.t<3200  and not is_fallen:
                 self.library.stop("TurnRight20")
                 self.library.play("ForwardLoop")
                 current_motion = 'ForwardLoop'
                 self.t += 1
-            if self.t >= 1800 and self.t<2000  and not is_fallen:
+            # if self.t >= 3200 and self.t<3500  and not is_fallen:
+            #     self.library.stop("ForwardLoop")
+            #     self.library.play("Backwards")
+            #     current_motion = 'Backwards'
+            #     self.t += 1
+            if self.t >= 3200  and self.t<3450  and not is_fallen:
                 self.library.stop("ForwardLoop")
-                self.library.play("TurnRight60")
-                current_motion = 'TurnRight60'
+                self.library.play("TurnRight20")
+                current_motion = 'TurnRight20'
                 self.t += 1
-            if self.t >= 2000 and self.t<2500 and not is_fallen:
-                self.library.stop("TurnRight60")
+            if self.t >= 3450 and self.t<3900  and not is_fallen:
+                self.library.stop("TurnRight20")
                 self.library.play("ForwardLoop")
                 current_motion = 'ForwardLoop'
                 self.t += 1
-            if self.t >= 2500 and self.t<2850  and not is_fallen:
+            if self.t >= 3900 and self.t<4200  and not is_fallen:
                 self.library.stop("ForwardLoop")
-                self.library.play("TurnRight60")
-                current_motion = 'TurnRight60'
+                self.library.play("TurnRight20")
+                current_motion = 'TurnRight20'
                 self.t += 1
-            if self.t >= 2850 and self.t<3300  and not is_fallen:
-                self.library.stop("TurnRight60")
-                self.library.play("ForwardLoop")
-                current_motion  = 'ForwardLoop'
-                self.t += 1
-            if self.t >= 3300 and self.t<3900  and not is_fallen:
-                self.library.stop("ForwardLoop")
-                self.library.play("TurnRight60")
-                current_motion = 'TurnRight60'
-                self.t += 1
-            if self.t >= 3900 and self.t<4300  and not is_fallen:
-                self.library.stop("TurnRight60")
+            if self.t >= 4200 and self.t<4500  and not is_fallen:
+                self.library.stop("TurnRight20")
                 self.library.play("ForwardLoop")
                 current_motion = 'ForwardLoop'
                 self.t += 1
-            if self.t >= 4300  and not is_fallen:
+            
+            if self.t >= 4500  and not is_fallen:
                 self.library.stop("ForwardLoop")
                 self.t += 1
                 self.library.play("Stand")
                 current_motion = 'Stand'
-
-
-            # if self.t > 1000:
-            #     if self.nb_motions == 1:
-            #         self.library.stop('SideStepLeftLoop')
-            #     if self.library.isMotionOver() and self.nb_motions == 1:
-            #         self.library.play('SideStepLeft')
-            #         self.nb_motions += 1
-            #     if self.library.isMotionOver() and self.nb_motions == 2:
-            #         self.library.play('TurnLeft20')
-            #         self.nb_motions += 1
-            #     if self.library.isMotionOver() and self.nb_motions == 3:
-            #         self.library.play('Forwards50')
-            #         self.nb_motions += 1
-            #     if self.library.isMotionOver() and self.nb_motions == 4:
-            #         self.library.play('Forwards50')
-            #         self.nb_motions += 1
-                
-            #     if self.library.isMotionOver() and self.nb_motions == 5:
-            #         self.library.play('TurnRight60')
-            #         self.nb_motions += 1
+            
+            # if self.t >= 1800 and self.t<2000  and not is_fallen:
+            #     self.library.stop("ForwardLoop")
+            #     self.library.play("TurnRight60")
+            #     current_motion = 'TurnRight60'
+            #     self.t += 1
+            # if self.t >= 2000 and self.t<2500 and not is_fallen:
+            #     self.library.stop("TurnRight60")
+            #     self.library.play("ForwardLoop")
+            #     current_motion = 'ForwardLoop'
+            #     self.t += 1
+            # if self.t >= 2500 and self.t<2850  and not is_fallen:
+            #     self.library.stop("ForwardLoop")
+            #     self.library.play("TurnRight60")
+            #     current_motion = 'TurnRight60'
+            #     self.t += 1
+            # if self.t >= 2850 and self.t<3300  and not is_fallen:
+            #     self.library.stop("TurnRight60")
+            #     self.library.play("ForwardLoop")
+            #     current_motion  = 'ForwardLoop'
+            #     self.t += 1
+            # if self.t >= 3300 and self.t<3900  and not is_fallen:
+            #     self.library.stop("ForwardLoop")
+            #     self.library.play("TurnRight60")
+            #     current_motion = 'TurnRight60'
+            #     self.t += 1
+            # if self.t >= 3900 and self.t<4300  and not is_fallen:
+            #     self.library.stop("TurnRight60")
+            #     self.library.play("ForwardLoop")
+            #     current_motion = 'ForwardLoop'
+            #     self.t += 1
+            # if self.t >= 4300  and not is_fallen:
+            #     self.library.stop("ForwardLoop")
+            #     self.t += 1
+            #     self.library.play("Stand")
+            #     current_motion = 'Stand'
             
                 
 
